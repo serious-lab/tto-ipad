@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="de" class="quer">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b2230">
+<title>TTO-Prüfer</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TTO-Prüfer">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef0f3; --surface:#ffffff; --fg:#1b2230; --muted:#5b6475; --line:#d6dae2; --chip:#e1e5eb;
+  --bar:#1b2230; --bar-btn:#2e3644; --bar-fg:#ffffff;
+  --accent:#f2b705; --accent-ink:#1b2230; --done:#1b2230;
+  --yes:#1f7a4d; --no:#b4312b; --primary:#1b2230; --primary-fg:#ffffff;
+  --red-card:#c62828; --blue-card:#1d5fc4;
+  --display:"Barlow Condensed","Roboto Condensed",sans-serif-condensed,"Arial Narrow",sans-serif;
+  --body:"Inter",Roboto,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#12161d; --surface:#1b212b; --fg:#e8ebf0; --muted:#9aa3b2; --line:#2e3644; --chip:#262e3a;
+  --bar:#0b0e13; --bar-btn:#232a35; --bar-fg:#e8ebf0;
+  --accent:#f5c22e; --accent-ink:#12161d; --done:#e8ebf0;
+  --yes:#2e8f5f; --no:#c4423b; --primary:#e8ebf0; --primary-fg:#12161d;
+  --red-card:#e04646; --blue-card:#3f7fe0;
+  color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;
+  -webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+/* Seitenränder: auf Handy 20px, auf Tablet so breit, dass die Inhaltsspalte max. 680px hat */
+:root{--gl:max(20px,env(safe-area-inset-left,0px),calc((100vw - 680px)/2));--gr:max(20px,env(safe-area-inset-right,0px),calc((100vw - 680px)/2))}
+.app{height:100%;display:flex;flex-direction:column}
+.split{flex:1;min-height:0;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bar);color:var(--bar-fg);
+  padding:calc(env(safe-area-inset-top,0px) + 14px) var(--gr) 14px var(--gl)}
+.brand{display:flex;align-items:center;gap:10px}
+.badge{font-family:var(--display);font-weight:700;font-size:18px;background:var(--accent);color:var(--accent-ink);padding:2px 8px;border-radius:4px}
+.name{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:.02em}
+.icon-btn{width:44px;height:44px;border:0;border-radius:22px;background:var(--bar-btn);color:var(--bar-fg);display:flex;align-items:center;justify-content:center;cursor:pointer}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+main{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column}
+.pad{padding-left:var(--gl);padding-right:var(--gr)}
+.meta{display:flex;flex-direction:column;gap:10px;padding-top:24px}
+.meta-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.step{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:.06em;color:var(--muted)}
+.ctx{font-size:13px;color:var(--muted);text-align:right}
+.prog{display:flex;gap:4px}
+.prog i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.prog i.d{background:var(--done)} .prog i.c{background:var(--accent)}
+.qwrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;padding-top:24px;padding-bottom:24px}
+h1{margin:0;font-size:clamp(24px,7.5vw,30px);line-height:1.25;font-weight:600;text-wrap:balance}
+.hint{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.lbl{font-size:12px;letter-spacing:.08em;font-weight:600;color:var(--muted);text-transform:uppercase}
+.hint-list{display:grid;grid-template-columns:minmax(0,1fr);row-gap:8px;font-size:15px;line-height:1.35}
+.hint-list div{display:grid;grid-template-columns:28px minmax(0,1fr)}
+.hint-list b{font-weight:600;color:var(--muted)}
+.hint p{margin:0;font-size:15px}
+.way{display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:13px;padding:5px 10px;border-radius:14px;background:var(--chip)}
+footer{display:flex;flex-direction:column;gap:12px;background:var(--surface);border-top:1px solid var(--line);
+  padding-top:12px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+.back{align-self:flex-start;min-height:44px;border:0;background:transparent;font-size:15px;font-weight:500;color:var(--muted);padding:0 4px}
+.back:disabled{visibility:hidden}
+.yn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.yn button{height:104px;border:0;border-radius:14px;color:#ffffff;font-family:var(--display);font-weight:700;font-size:40px;transition:transform .08s}
+.yn button:active{transform:scale(.97)}
+.ja{background:var(--yes)} .nein{background:var(--no)}
+.primary{height:64px;border:0;border-radius:14px;background:var(--primary);color:var(--primary-fg);font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.02em}
+.hero{display:flex;flex-direction:column;gap:10px;padding-top:28px;padding-bottom:24px;background:var(--accent);color:var(--accent-ink)}
+.hero .lbl{color:var(--accent-ink)}
+.fall{font-family:var(--display);font-weight:700;font-size:64px;line-height:.95}
+.fall small{font-size:36px}
+.hero-t{font-size:17px;font-weight:500;line-height:1.35}
+.cards{display:flex;flex-direction:column;gap:12px;padding-top:20px;padding-bottom:20px}
+.card{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card .v{font-size:17px;font-weight:600;line-height:1.3}
+.card .s{font-size:14px;color:var(--muted)}
+.dq{display:flex;align-items:center;gap:12px}
+.kart{display:flex;gap:4px}
+.kart i{width:18px;height:26px;border-radius:3px}
+.kart .r{background:var(--red-card)} .kart .b{background:var(--blue-card)}
+/* Tablet (iPad): alles etwas größer */
+@media (min-width:700px){
+  body{font-size:18px}
+  .name{font-size:28px} .badge{font-size:21px}
+  .step{font-size:21px} .ctx{font-size:15px}
+  h1{font-size:40px}
+  .hint-list,.hint p{font-size:18px}
+  .chips span{font-size:15px;padding:6px 12px}
+  .yn button{height:128px;font-size:50px}
+  .back{font-size:17px}
+  .primary{height:76px;font-size:30px}
+  .fall{font-size:88px} .fall small{font-size:48px}
+  .hero-t{font-size:21px}
+  .card{padding:20px} .card .v{font-size:21px} .card .s{font-size:16px}
+  .lbl{font-size:13px}
+}
+/* iPad-Version (html class="quer"): Querformat mit Antwortspalte rechts */
+@media (orientation:landscape) and (min-width:900px){
+  html.quer{--gl:max(32px,env(safe-area-inset-left,0px));--gr:max(32px,env(safe-area-inset-right,0px))}
+  .quer .split{flex-direction:row}
+  .quer main{flex:1;min-width:0}
+  .quer main .pad{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:40px}
+  .quer footer{width:360px;flex-shrink:0;border-top:0;border-left:1px solid var(--line);gap:16px;
+    padding:24px max(32px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 32px) 28px}
+  .quer .yn{flex:1;display:flex;flex-direction:column;gap:16px}
+  .quer .yn button{flex:1;height:auto;min-height:120px;font-size:64px;border-radius:18px}
+  .quer .primary{margin-top:auto;height:200px;font-size:38px;line-height:1.1;border-radius:18px}
+  .quer .meta{padding-top:32px}
+  .quer .prog i{height:5px}
+  .quer .qwrap{justify-content:flex-start;padding-top:min(9vh,72px)}
+  .quer h1{font-size:38px;line-height:1.2;text-wrap:pretty}
+  .quer .dq{flex-direction:column;align-items:flex-start;gap:8px}
+  .quer .hint{padding:20px 24px}
+  .quer .way{margin-top:auto;padding-bottom:28px}
+  .quer .hero{padding-top:32px;padding-bottom:28px}
+  .quer .fall{font-size:96px;line-height:.9}
+  .quer .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding-top:28px}
+}
+@media (prefers-reduced-motion: reduce){.yn button{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><span class="badge">TTO</span><span class="name">Prüfer</span></div>
+    <button class="icon-btn" id="reset" aria-label="Neu starten">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    </button>
+  </header>
+  <div class="split">
+    <main id="main" aria-live="polite"></main>
+    <footer class="pad" id="foot"></footer>
+  </div>
+</div>
+
+<script>
+// ---------- Fragebaum (Reglement elektronisches Team-Time-out, Fall 1–10) ----------
+const UNZ_EIGEN=[["a)","viertes TTO"],["b)","zweites TTO in den letzten 5 Minuten"],["c)","drittes TTO in einer Halbzeit"],["d)","TTO in der Verlängerung"],["e)","zweites TTO im selben Angriff"]];
+const UNZ_GEGNER=UNZ_EIGEN.slice(0,4);
+const L30=["Letzte 30 s","Vor letzten 30 s"];
+const T={
+  start:{q:"Liegt ein technischer Defekt der Team-Time-out-Anlage vor?",ja:"F10",nein:"absicht",c:["Defekt","Kein Defekt"]},
+  absicht:{q:"Wurde der Buzzer unabsichtlich betätigt (Spieler oder Offizieller)?",ja:"F7",nein:"zuord",c:["Unabsichtlich","Absichtlich"]},
+  zuord:{q:"Ist klar zuordenbar, wer das Team-Time-out verursacht hat?",note:"Können Delegierte oder Schiedsrichter das nicht erkennen, gilt Fall 9.",ja:"spieler",nein:"besitz",c:["Zuordenbar","Nicht zuordenbar"]},
+  spieler:{q:"Hat ein Spieler (kein Offizieller) das Team-Time-out beantragt?",ja:"s_besitz",nein:"besitz",c:["Spieler","Offizieller"]},
+  // Fall 8
+  s_besitz:{q:"War die eigene Mannschaft im Ballbesitz?",ja:"s_ball",nein:"s_tor",c:["Eigener Ball","Gegner am Ball"],pos:1},
+  s_ball:{q:"War der Ball zum Zeitpunkt der Unterbrechung im Spiel?",ja:"F8_eig_im",nein:"F8_eig_nicht",c:["Ball im Spiel","Ball nicht im Spiel"]},
+  s_tor:{q:"Bestand für die gegnerische Mannschaft eine klare Torgelegenheit?",ja:"s_30_dmb",nein:"s_30_2min",c:["Klare Torgelegenheit","Keine klare Torgelegenheit"]},
+  s_30_dmb:{q:"War es in den letzten 30 Sekunden des Spiels?",ja:"F8_g_dmb_30",nein:"F8_g_dmb",c:L30},
+  s_30_2min:{q:"War es in den letzten 30 Sekunden des Spiels?",ja:"F8_g_2_30",nein:"F8_g_2",c:L30},
+  // Offizieller
+  besitz:{q:"War die eigene Mannschaft (die den Buzzer gedrückt hat) im Ballbesitz?",ja:"e_unz",nein:"verlust",c:["Eigener Ball","Gegner am Ball"],pos:1},
+  e_unz:{q:"Ist das Team-Time-out unzulässig?",list:UNZ_EIGEN,ja:"e_ball",nein:"OK",c:["Unzulässig","Zulässig"]},
+  e_ball:{q:"War der Ball zum Zeitpunkt der Unterbrechung im Spiel?",ja:"e_ce_im",nein:"e_ce_nicht",c:["Ball im Spiel","Ball nicht im Spiel"]},
+  e_ce_im:{q:"Handelt es sich um Fall c) oder e)?",list:[UNZ_EIGEN[2],UNZ_EIGEN[4]],ja:"F51_ce",nein:"F51",c:["Fall c/e","Nicht c/e"]},
+  e_ce_nicht:{q:"Handelt es sich um Fall c) oder e)?",list:[UNZ_EIGEN[2],UNZ_EIGEN[4]],ja:"F52_ce",nein:"F52",c:["Fall c/e","Nicht c/e"]},
+  verlust:{q:"Wurde das Team-Time-out unmittelbar nach dem Ballverlust beantragt (ohne Absicht)?",ja:"F4",nein:"g_unz",c:["Nach Ballverlust","Nicht nach Ballverlust"]},
+  g_unz:{q:"Ist das Team-Time-out zusätzlich unzulässig?",list:UNZ_GEGNER,ja:"g6_30",nein:"g_tor",c:["Unzulässig","Zulässig"]},
+  g6_30:{q:"War es in den letzten 30 Sekunden des Spiels?",ja:"F6_30",nein:"F6",c:L30},
+  g_tor:{q:"Bestand für die gegnerische Mannschaft eine klare Torgelegenheit?",ja:"g_30_dmb",nein:"g_30_prog",c:["Klare Torgelegenheit","Keine klare Torgelegenheit"]},
+  g_30_dmb:{q:"War es in den letzten 30 Sekunden des Spiels?",ja:"F3_dmb",nein:"F2",c:L30},
+  g_30_prog:{q:"War es in den letzten 30 Sekunden des Spiels?",ja:"F3_prog",nein:"F1",c:L30},
+};
+const DQ={s:"Disqualifikation 8:10b",sub:"Rote und blaue Karte",dq:1};
+const DMB={s:"Disqualifikation mit Bericht",sub:"Regel 8:10b · rote und blaue Karte",dq:1};
+const PROG={s:"Progressive Bestrafung"};
+const H46={s:"Hinausstellung",sub:"Regel 4:6"};
+const NONE={s:"Keine Bestrafung"};
+const M1="−1 Team-Time-out", WAHL="Wahl: 7-m-Wurf oder Freiwurf";
+const R={
+  F10:{f:"10",t:"Technischer Defekt der Anlage",...NONE,w:"Ein Mannschaftsoffizieller beantragt das Team-Time-out mündlich am Tisch der Spielleitung",tto:"Zeitpunkt der Beantragung ist der Moment, in dem der Buzzer betätigt wurde"},
+  F7:{f:"7",t:"Buzzer unabsichtlich betätigt",...NONE,w:"Wurf gemäß Spielsituation",tto:"Kein Abzug"},
+  F8_eig_im:{f:"8",t:"Spieler beantragt TTO · eigener Ball · Ball im Spiel",...H46,w:"Freiwurf für die gegnerische Mannschaft (auch in den letzten 30 Sekunden)",tto:M1},
+  F8_eig_nicht:{f:"8",t:"Spieler beantragt TTO · eigener Ball · Ball nicht im Spiel",...H46,w:"Mit dem Wurf, der vor der Unterbrechung hätte ausgeführt werden sollen",tto:M1},
+  F8_g_dmb:{f:"8",t:"Spieler beantragt TTO · Gegner am Ball · klare Torgelegenheit",...DMB,w:"7-m-Wurf",tto:M1},
+  F8_g_dmb_30:{f:"8",t:"Spieler beantragt TTO · Gegner am Ball · klare Torgelegenheit · letzte 30 s",...DMB,w:WAHL,tto:M1},
+  F8_g_2:{f:"8",t:"Spieler beantragt TTO · Gegner am Ball · keine klare Torgelegenheit",...H46,w:"7-m-Wurf",tto:M1},
+  F8_g_2_30:{f:"8",t:"Spieler beantragt TTO · Gegner am Ball · keine klare Torgelegenheit · letzte 30 s",...H46,w:WAHL,tto:M1},
+  OK:{f:"–",t:"Reguläres Team-Time-out",...NONE,w:"Team-Time-out wird gewährt",tto:"−1 Team-Time-out (regulär)"},
+  F51:{f:"5/1",t:"Unzulässiges TTO · eigener Ball · Ball im Spiel",...PROG,w:"Freiwurf für die gegnerische Mannschaft",tto:"Kein Abzug (nur in den Fällen c und e)"},
+  F51_ce:{f:"5/1",t:"Unzulässiges TTO · eigener Ball · Ball im Spiel",...PROG,w:"Freiwurf für die gegnerische Mannschaft",tto:"−1 Team-Time-out (Fall c bzw. e)"},
+  F52:{f:"5/2",t:"Unzulässiges TTO · eigener Ball · Ball nicht im Spiel",...PROG,w:"Mit dem Wurf, der vor der Unterbrechung hätte ausgeführt werden sollen",tto:"Kein Abzug (nur in den Fällen c und e)"},
+  F52_ce:{f:"5/2",t:"Unzulässiges TTO · eigener Ball · Ball nicht im Spiel",...PROG,w:"Mit dem Wurf, der vor der Unterbrechung hätte ausgeführt werden sollen",tto:"−1 Team-Time-out (Fall c bzw. e)"},
+  F4:{f:"4",t:"Beantragung unmittelbar nach Ballverlust (ohne Absicht)",...NONE,w:"Wurf gemäß Spielsituation",tto:M1},
+  F6:{f:"6",t:"Unzulässiges TTO · Gegner am Ball",...DQ,w:"7-m-Wurf",tto:M1},
+  F6_30:{f:"6",t:"Unzulässiges TTO · Gegner am Ball · letzte 30 s",...DQ,w:WAHL,tto:M1},
+  F1:{f:"1",t:"Gegner am Ball · keine klare Torgelegenheit",...PROG,w:"7-m-Wurf",tto:M1},
+  F2:{f:"2",t:"Gegner am Ball · klare Torgelegenheit",...DQ,w:"7-m-Wurf",tto:M1},
+  F3_prog:{f:"3",t:"Gegner am Ball · keine klare Torgelegenheit · letzte 30 s",...PROG,w:WAHL,tto:M1},
+  F3_dmb:{f:"3",t:"Gegner am Ball · klare Torgelegenheit · letzte 30 s",...DQ,w:WAHL,tto:M1},
+};
+
+// ---------- Zustand ----------
+let hist=[]; let cur="start";
+const depth=n=>T[n]?1+Math.max(depth(T[n].ja),depth(T[n].nein)):0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const main=document.getElementById("main"), foot=document.getElementById("foot");
+
+function chipsHtml(){
+  if(!hist.length) return "";
+  return `<div class="way pad"><span class="lbl">Bisheriger Weg</span><div class="chips">${
+    hist.map(h=>`<span>${esc(T[h.node].c[h.a==="ja"?0:1])}</span>`).join("")}</div></div>`;
+}
+function context(){
+  const p=hist.find(h=>T[h.node].pos);
+  return p?(p.a==="ja"?"Eigene Mannschaft in Ballbesitz":"Gegnerische Mannschaft in Ballbesitz"):"";
+}
+const nb=t=>t.replace(/Team-Time-out(-[A-Za-zÄÖÜäöüß]+)?/g,m=>m.replace(/-/g,"\u2011"));
+function render(){
+  const n=T[cur];
+  if(n){
+    const total=hist.length+depth(cur);
+    let bars=""; for(let i=0;i<total;i++) bars+=`<i class="${i<hist.length?"d":i===hist.length?"c":""}"></i>`;
+    let extra="";
+    if(n.list) extra=`<div class="hint"><span class="lbl">Unzulässig ist</span><div class="hint-list">${n.list.map(([k,v])=>`<div><b>${k}</b><span>${esc(v)}</span></div>`).join("")}</div></div>`;
+    else if(n.note) extra=`<div class="hint"><p>${esc(n.note)}</p></div>`;
+    main.innerHTML=`<div class="meta pad"><div class="meta-row"><span class="step">FRAGE ${hist.length+1}</span><span class="ctx">${esc(context())}</span></div><div class="prog" aria-hidden="true">${bars}</div></div>
+      <div class="qwrap pad"><h1>${esc(nb(n.q))}</h1>${extra}</div>${chipsHtml()}`;
+    foot.innerHTML=`<button class="back" id="bBack" ${hist.length?"":"disabled"}>← Zurück</button>
+      <div class="yn"><button class="ja" id="bJa">Ja</button><button class="nein" id="bNein">Nein</button></div>`;
+    document.getElementById("bJa").onclick=()=>answer("ja");
+    document.getElementById("bNein").onclick=()=>answer("nein");
+  }else{
+    const r=R[cur]; const f9=hist.some(h=>h.node==="zuord"&&h.a==="nein");
+    const fall=r.f==="–"?"Kein Fall":(f9?`Fall 9 <small>+</small> ${r.f}`:`Fall ${r.f}`);
+    const pen=`<div class="card"><span class="lbl">Bestrafung</span>${r.dq?`<div class="dq"><div class="kart" aria-hidden="true"><i class="r"></i><i class="b"></i></div><span class="v">${esc(r.s)}</span></div>`:`<span class="v">${esc(r.s)}</span>`}${r.sub?`<span class="s">${esc(r.sub)}</span>`:""}</div>`;
+    main.innerHTML=`<div class="hero pad"><span class="lbl">Ergebnis</span><span class="fall">${fall}</span><span class="hero-t">${esc(r.t)}</span></div>
+      <div class="cards pad">${pen}
+        <div class="card"><span class="lbl">Spielfortsetzung</span><span class="v">${esc(r.w)}</span></div>
+        <div class="card"><span class="lbl">Team-Time-out</span><span class="v">${esc(r.tto)}</span></div>
+        ${f9?`<div class="card"><span class="lbl">Wer wird bestraft?</span><span class="v">Der verantwortliche Mannschaftsoffizielle</span><span class="s">Fall 9: Verursacher nicht erkennbar</span></div>`:""}
+      </div>${chipsHtml()}`;
+    foot.innerHTML=`<button class="back" id="bBack">← Letzte Antwort ändern</button><button class="primary" id="bNew">Neue Situation prüfen</button>`;
+    document.getElementById("bNew").onclick=reset;
+  }
+  document.getElementById("bBack").onclick=goBack;
+  main.scrollTop=0;
+}
+
+// ---------- Navigation (inkl. Android-Zurück-Taste) ----------
+let useHist=true; // fällt auf interne Navigation zurück, falls der Browserverlauf nicht nutzbar ist
+function push(){ if(!useHist) return; try{history.pushState({d:hist.length},"")}catch(e){useHist=false} }
+function answer(a){hist.push({node:cur,a});cur=T[cur][a];push();render()}
+function stepBack(){if(!hist.length)return false;cur=hist.pop().node;render();return true}
+function goBack(){ if(!hist.length) return; if(useHist) history.back(); else stepBack(); }
+function reset(){ const n=hist.length; if(!n) return; if(useHist) history.go(-n); else {hist=[];cur="start";render()} }
+addEventListener("popstate",e=>{
+  const d=(e.state&&e.state.d)||0;
+  while(hist.length>d) cur=hist.pop().node;
+  render();
+});
+// Für die Android-App: gibt true zurück, wenn ein Schritt zurück möglich war.
+window.ttoBack=function(){ if(!hist.length) return false; goBack(); return true; };
+
+document.getElementById("reset").onclick=reset;
+addEventListener("keydown",e=>{
+  if(!T[cur]) return;
+  if(e.key==="j"||e.key==="J") answer("ja");
+  if(e.key==="n"||e.key==="N") answer("nein");
+});
+try{history.replaceState({d:0},"")}catch(e){useHist=false}
+render();
+
+if("serviceWorker" in navigator && location.protocol==="https:"){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>

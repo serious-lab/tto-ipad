@@ -1,0 +1,49 @@
+TTO-PRÜFER ALS WEB-APP AUF DEM IPAD INSTALLIEREN (QUERFORMAT)
+=============================================================
+
+Die App muss einmal im Internet liegen (über https). Danach legt Safari
+sie wie eine echte App auf den Home-Bildschirm: eigenes Icon, Vollbild
+und offline nutzbar. Kostenlos geht das mit GitHub Pages.
+
+1. KONTO ANLEGEN
+   Auf https://github.com ein kostenloses Konto erstellen
+   (oder das Konto der Android-Version weiterverwenden).
+
+2. NEUES REPOSITORY
+   Oben rechts "+" -> "New repository".
+   Name: tto-pruefer-ipad
+   (eigenes Repository, damit es nicht mit der Android-Version kollidiert)
+   "Public" auswählen -> "Create repository".
+
+3. DATEIEN HOCHLADEN
+   "uploading an existing file" anklicken und den INHALT dieses Ordners
+   hineinziehen: index.html, manifest.webmanifest, sw.js und den Ordner
+   "icons". Unten "Commit changes" klicken.
+
+4. GITHUB PAGES EINSCHALTEN
+   "Settings" -> links "Pages" -> Branch "main", "/ (root)" -> "Save".
+   Nach ca. 1 Minute erreichbar unter:
+     https://BENUTZERNAME.github.io/tto-pruefer-ipad/
+
+5. AUF DEM IPAD INSTALLIEREN
+   Die Adresse in SAFARI öffnen (nicht Chrome).
+   Auf das Teilen-Symbol (Quadrat mit Pfeil) tippen
+   -> "Zum Home-Bildschirm" -> "Hinzufügen".
+   Einmal mit Internet öffnen, danach läuft die App auch offline.
+
+QUERFORMAT
+   Im Querformat stehen die Antworten Ja/Nein rechts übereinander.
+   Hält man das iPad hochkant, schaltet die App automatisch auf das
+   Hochformat-Layout (Ja/Nein unten nebeneinander). Sperren lässt sich
+   die Drehung bei Web-Apps auf dem iPad nicht; wer das will, nutzt die
+   Ausrichtungssperre im Kontrollzentrum des iPads.
+
+ÄNDERUNGEN SPÄTER
+   Geänderte Dateien erneut hochladen und in sw.js die Zeile
+     const CACHE = "tto-pruefer-ipad-v1";
+   auf v2, v3 ... hochzählen. Dann holt sich die App beim nächsten
+   Start mit Internet die neue Version.
+
+TESTEN AM RECHNER
+   index.html per Doppelklick im Browser öffnen und das Fenster breiter
+   als hoch ziehen (mind. 900 Pixel), dann erscheint das Querformat.
