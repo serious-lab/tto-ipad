@@ -40,8 +40,8 @@ QUERFORMAT
 
 ÄNDERUNGEN SPÄTER
    Geänderte Dateien erneut hochladen und in sw.js die Zeile
-     const CACHE = "tto-pruefer-ipad-v1";
-   auf v2, v3 ... hochzählen. Dann holt sich die App beim nächsten
+     const CACHE = "tto-pruefer-ipad-v2";
+   auf v3, v4 ... hochzählen. Dann holt sich die App beim nächsten
    Start mit Internet die neue Version.
 
 TESTEN AM RECHNER

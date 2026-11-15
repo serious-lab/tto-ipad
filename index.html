@@ -151,7 +151,7 @@ const UNZ_GEGNER=UNZ_EIGEN.slice(0,4);
 const L30=["Letzte 30 s","Vor letzten 30 s"];
 const T={
   start:{q:"Liegt ein technischer Defekt der Team-Time-out-Anlage vor?",ja:"F10",nein:"absicht",c:["Defekt","Kein Defekt"]},
-  absicht:{q:"Wurde der Buzzer unabsichtlich betätigt (Spieler oder Offizieller)?",ja:"F7",nein:"zuord",c:["Unabsichtlich","Absichtlich"]},
+  absicht:{q:"Wurde der Buzzer absichtlich betätigt (Spieler oder Offizieller)?",ja:"zuord",nein:"F7",c:["Absichtlich","Unabsichtlich"]},
   zuord:{q:"Ist klar zuordenbar, wer das Team-Time-out verursacht hat?",note:"Können Delegierte oder Schiedsrichter das nicht erkennen, gilt Fall 9.",ja:"spieler",nein:"besitz",c:["Zuordenbar","Nicht zuordenbar"]},
   spieler:{q:"Hat ein Spieler (kein Offizieller) das Team-Time-out beantragt?",ja:"s_besitz",nein:"besitz",c:["Spieler","Offizieller"]},
   // Fall 8

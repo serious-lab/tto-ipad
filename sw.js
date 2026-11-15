@@ -1,5 +1,5 @@
 // Offline-Cache für den TTO-Prüfer. Bei Änderungen an der App die Versionsnummer erhöhen.
-const CACHE = "tto-pruefer-ipad-v1";
+const CACHE = "tto-pruefer-ipad-v2";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png"];
 
 self.addEventListener("install", e => {
